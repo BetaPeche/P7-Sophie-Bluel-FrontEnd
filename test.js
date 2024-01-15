@@ -11,6 +11,11 @@ async function afficherTravaux (){
         const figure = document.createElement("figure")
         const img = document.createElement("img")
         const figcaption = document.createElement("figcaption")
+
+        img.setAttribute("src", avis[i].imageUrl)
+        img.setAttribute("alt", avis[i].title)
+        figcaption.innerText = avis[i].title
+
         gallery.appendChild(figure)
         figure.appendChild(img)
         figure.appendChild(figcaption)

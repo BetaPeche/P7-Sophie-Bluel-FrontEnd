@@ -6,12 +6,11 @@ async function afficherTravaux (){
     const gallery = document.querySelector('.gallery')
 
     for (let i = 0; i < avis.length; i++) {
-        console.log(avis[i].title)
-        console.log(avis[i].imageUrl)
         const figure = document.createElement("figure")
         const img = document.createElement("img")
         const figcaption = document.createElement("figcaption")
 
+        figure.setAttribute("data-id", avis[i].categoryId)
         img.setAttribute("src", avis[i].imageUrl)
         img.setAttribute("alt", avis[i].title)
         figcaption.innerText = avis[i].title

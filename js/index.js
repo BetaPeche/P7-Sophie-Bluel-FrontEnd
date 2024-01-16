@@ -29,7 +29,7 @@ const divCat = document.querySelector(".category")
 for (let i = 0; i < category.length; i++) {
     if(!i){
         const link = document.createElement("a")
-        
+
         link.classList.add("category__link")
         link.classList.add("link-selected")
         link.innerText="Tous"
@@ -38,8 +38,8 @@ for (let i = 0; i < category.length; i++) {
         link.addEventListener("click", (event)=> {
             effacerClassCategorie()
             afficherTravaux(jobs)
-            const lienActif = event.currentTarget
-            lienActif.classList.add("link-selected")
+            const activeLink = event.currentTarget
+            activeLink.classList.add("link-selected")
         })
     }
 
@@ -53,13 +53,13 @@ for (let i = 0; i < category.length; i++) {
 
     link.addEventListener("click", (event)=> {
         effacerClassCategorie()
-        const lienActif = event.currentTarget
-        const numbCat = lienActif.getAttribute("data-category-id")
+        const activeLink = event.currentTarget
+        const numbCat = activeLink.getAttribute("data-category-id")
         const newArray = jobs.filter(function (jobs) {
             return jobs.categoryId == numbCat
         })
         afficherTravaux(newArray)
-        lienActif.classList.add("link-selected")
+        activeLink.classList.add("link-selected")
     })
 }
 

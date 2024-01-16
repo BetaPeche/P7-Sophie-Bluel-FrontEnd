@@ -3,27 +3,31 @@ async function afficherTravaux(){
     const reponse = await fetch("http://localhost:5678/api/works")
     if (reponse.ok){
         const jobs = await reponse.json()
-        console.log(jobs)
 
-        const gallery = document.querySelector('.gallery')
-
-        for (let i = 0; i < jobs.length; i++) {
-            const figure = document.createElement("figure")
-            const img = document.createElement("img")
-            const figcaption = document.createElement("figcaption")
-
-            figure.setAttribute("data-category-id", jobs[i].categoryId)
-            img.setAttribute("src", jobs[i].imageUrl)
-            img.setAttribute("alt", jobs[i].title)
-            figcaption.innerText = jobs[i].title
-
-            gallery.appendChild(figure)
-            figure.appendChild(img)
-            figure.appendChild(figcaption)
-        }
+        creationTravaux(jobs)
     }
     else{
         console.log("Pas de réponse du serveur")
+    }
+}
+
+// Crée et affiche les travaux via un tableau
+function creationTravaux(tableau) {
+    const gallery = document.querySelector('.gallery')
+
+    for (let i = 0; i < tableau.length; i++) {
+        const figure = document.createElement("figure")
+        const img = document.createElement("img")
+        const figcaption = document.createElement("figcaption")
+
+        figure.setAttribute("data-category-id", tableau[i].categoryId)
+        img.setAttribute("src", tableau[i].imageUrl)
+        img.setAttribute("alt", tableau[i].title)
+        figcaption.innerText = tableau[i].title
+
+        gallery.appendChild(figure)
+        figure.appendChild(img)
+        figure.appendChild(figcaption)
     }
 }
 
@@ -66,6 +70,7 @@ async function afficherCategories(){
     }
 }
 
+// Supprime la classe "link-selected" sur les liens
 function effacerClassCategorie() {
     const links = document.querySelectorAll(".category a")
     for (let i = 0; i < links.length; i++) {

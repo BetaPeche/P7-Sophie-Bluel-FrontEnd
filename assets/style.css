@@ -126,6 +126,37 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+.category {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	padding-top: 21px;
+	margin-bottom: 51px;
+}
+
+.category__link {
+	text-decoration: none;
+	border-radius: 60px;
+	border: 1px solid #1D6154;
+	padding: 9px 20px 9px 20px;
+	color: #1D6154;
+	text-align: center;
+	font-family: 'Syne';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+}
+
+.category__link:hover {
+	background-color: #1D6154;
+	color: white;
+}
+
+.link-selected {
+	background-color: #1D6154;
+	color: white;
+}
 .gallery {
 	width: 100%;
 	display: grid;

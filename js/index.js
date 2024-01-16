@@ -1,1 +1,4 @@
+afficherCategories()
+
 afficherTravaux()
+

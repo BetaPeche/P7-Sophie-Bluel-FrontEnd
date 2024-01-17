@@ -28,12 +28,11 @@ const category = await resp.json()
 const divCat = document.querySelector(".category")
 for (let i = 0; i < category.length; i++) {
     if(!i){
-        const link = document.createElement("a")
+        const link = document.createElement("button")
 
         link.classList.add("category__link")
         link.classList.add("link-selected")
         link.innerText="Tous"
-        link.setAttribute("href", "#")
         divCat.appendChild(link)
         link.addEventListener("click", (event)=> {
             effacerClassCategorie()
@@ -43,12 +42,11 @@ for (let i = 0; i < category.length; i++) {
         })
     }
 
-    const link = document.createElement("a")
+    const link = document.createElement("button")
 
     link.setAttribute("data-category-id", category[i].id)
     link.classList.add("category__link")
     link.innerText=category[i].name
-    link.setAttribute("href", "#")
     divCat.appendChild(link)
 
     link.addEventListener("click", (event)=> {
@@ -67,7 +65,7 @@ for (let i = 0; i < category.length; i++) {
 
 // Supprime la classe "link-selected" sur les liens
 function effacerClassCategorie() {
-    const links = document.querySelectorAll(".category a")
+    const links = document.querySelectorAll(".category button")
     for (let i = 0; i < links.length; i++) {
         links[i].classList.remove("link-selected")
     }

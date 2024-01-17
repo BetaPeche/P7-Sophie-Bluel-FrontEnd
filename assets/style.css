@@ -31,6 +31,17 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 }
+html, body {
+	height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+main {
+	flex-grow: 1;
+}
 ol, ul {
 	list-style: none;
 }
@@ -156,6 +167,7 @@ li:hover, li a:hover {
 .category__link:hover {
 	background-color: #1D6154;
 	color: white;
+	cursor: pointer;
 }
 
 .link-selected {

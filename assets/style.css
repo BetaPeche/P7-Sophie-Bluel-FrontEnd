@@ -95,6 +95,33 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+.spacer-59 {
+	margin-top: 59px;
+}
+.spacer-100 {
+	margin-top: 100px;
+}
+
+.bolden {
+	font-weight: 600;
+}
+
+.edit-mode {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 59px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 12px;
+	background-color: black;
+	color: white;
+	font-family: "Work Sans";
+	font-size: 16px;
+}
+
 nav ul {
 	display: flex;
 	align-items: center;
@@ -159,9 +186,8 @@ li:hover, li a:hover {
 	text-align: center;
 	font-family: 'Syne';
 	font-size: 16px;
-	font-style: normal;
 	font-weight: 700;
-	line-height: normal;
+	background-color: white;
 }
 
 .category__link:hover {
@@ -188,7 +214,14 @@ li:hover, li a:hover {
 }
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
+	text-align: center;
+}
+#contact a {
+	color: #3D3D3D;
+	font-family: "Work Sans";
+	font-size: 14px;
+	font-weight: 700;
 }
 #contact > * {
 	text-align: center;
@@ -227,6 +260,7 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
+	cursor: pointer;
 }
 
 footer nav ul {

@@ -71,19 +71,17 @@ function effacerClassCategorie() {
     }
 }
 
-function filtrerCategorie(id, tableau) {
-    const piecesFiltrees = tableau.filter(function (piece) {
-        return piece.prix <= 35;
-    })
+// Vérifie si l'utilisateur est connecté
+function estConnecte() {
+    const token = window.localStorage.getItem("token")
+    if(token){
+        return true
+    }
+    else{
+        return false
+    }
 }
 
-const ages = [32, 33, 16, 40];
-const result = ages.filter(checkAdult);
 
-function checkAdult(age) {
-  return age >= 18;
-}
-
-// event.currentTarget sur un eventListener pour avoir le click sur l'element
 
 

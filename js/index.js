@@ -79,7 +79,7 @@ function estConnecte() {
     }
 }
 
-// Conecte l'utilisateur
+// Connecte l'utilisateur
 function logIn(){
     const liLink = document.querySelectorAll("header nav ul li")
     const loginLink = liLink[2]
@@ -105,7 +105,7 @@ function logIn(){
     })
 }
 
-// Deconecte l'utilisateur
+// Deconnecte l'utilisateur
 function logOut(){
     window.localStorage.removeItem("token")
 

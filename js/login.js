@@ -51,8 +51,8 @@ async function connectionDB(obj){
         console.log("connection ok")
         const token = jobs.token
         console.log(token)
-        window.localStorage.setItem("token", token)
-        window.location.href = "index.html"
+        localStorage.setItem("token", token)
+        location.href = "index.html"
     }
     else{
         afficherErreur("Mauvaise combinaison Email/mot de passe")

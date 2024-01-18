@@ -61,7 +61,7 @@ for (let i = 0; i < category.length; i++) {
     })
 }
 
-
+estConnecte()
 
 // Supprime la classe "link-selected" sur les liens
 function effacerClassCategorie() {
@@ -75,12 +75,53 @@ function effacerClassCategorie() {
 function estConnecte() {
     const token = window.localStorage.getItem("token")
     if(token){
-        return true
-    }
-    else{
-        return false
+        logIn()
     }
 }
+
+// Conecte l'utilisateur
+function logIn(){
+    const liLink = document.querySelectorAll("header nav ul li")
+    const loginLink = liLink[2]
+
+    const editBar = document.querySelector(".edit-mode")
+    editBar.style.display = "flex"
+
+    const header = document.querySelector("header")
+    header.style.marginTop = "109px"
+
+    const category = document.querySelector(".category")
+    category.style.display = "none"
+
+    const gallery = document.querySelector(".gallery")
+    gallery.style.marginTop = "92px"
+
+    loginLink.innerText = "logout"
+    loginLink.addEventListener("click", (event)=> {
+        if(loginLink.innerText === "logout") {
+            loginLink.innerHTML = '<a href="login.html">login</a>'
+            logOut()
+        }
+    })
+}
+
+// Deconecte l'utilisateur
+function logOut(){
+    window.localStorage.removeItem("token")
+
+    const editBar = document.querySelector(".edit-mode")
+    editBar.style.display = "none"
+
+    const header = document.querySelector("header")
+    header.style.marginTop = "50px"
+
+    const category = document.querySelector(".category")
+    category.style.display = "flex"
+
+    const gallery = document.querySelector(".gallery")
+    gallery.style.marginTop = "0px"
+}
+
 
 
 

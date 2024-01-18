@@ -17,27 +17,7 @@ form.addEventListener("submit", (event)=> {
             email: mailValue,
             password: passwordValue
         }
-        const connectDB = JSON.stringify(connect)
-
-
-        fetch("http://localhost:5678/api/users/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: connectDB
-        })
-        .then(response => response.json())
-        .then(result => { 
-            if(result.userId){
-                console.log("connection ok")
-                const token = result.token
-                console.log(token)
-                window.localStorage.setItem("token", token)
-                window.location.href = "index.html"
-            }
-            else{
-                afficherErreur("Mauvaise combinaison Email/mot de passe")
-            }
-        })
+        connectionDB(connect)
     }
 })
 
@@ -55,5 +35,26 @@ function afficherErreur(text) {
             span.innerText = text
             form.insertBefore(span, button)
         }
+    }
+}
+
+// Connection à l'API
+async function connectionDB(obj){
+    const connectDB = JSON.stringify(obj)
+    const reponse = await fetch("http://localhost:5678/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: connectDB
+    })
+    const jobs = await reponse.json()
+    if(jobs.userId){
+        console.log("connection ok")
+        const token = jobs.token
+        console.log(token)
+        window.localStorage.setItem("token", token)
+        window.location.href = "index.html"
+    }
+    else{
+        afficherErreur("Mauvaise combinaison Email/mot de passe")
     }
 }

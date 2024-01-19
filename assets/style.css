@@ -107,6 +107,35 @@ h2{
 	font-weight: 600;
 }
 
+.modal {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 10;
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.30);
+	display: none;
+}
+
+.window-modal {
+	width: 630px;
+	height: 688px;
+	padding: 30px;
+	background-color: white;
+	border-radius: 10px;
+	position: relative;
+}
+
+.window-modal .fa-xmark{
+	cursor: pointer;
+	position: absolute;
+	right: 30px;
+}
+
 .edit-mode {
 	position: absolute;
 	top: 0px;
@@ -167,9 +196,32 @@ li:hover, li a:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+#portfolio {
+	position: relative;
+}
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
+}
+
+.edit-button {
+	position: absolute;
+	top: 8px;
+	left: calc(50% + 120px);
+	display: none;
+}
+.edit-button button{
+	padding: 0px;
+	background-color: transparent;
+	border: 0;
+	color: black;
+	font-family: "Work Sans";
+	font-size: 14px;
+	font-weight: 400;
+}
+.edit-button button:hover {
+	cursor: pointer;
+	text-decoration: underline;
 }
 .category {
 	display: flex;
@@ -237,6 +289,11 @@ li:hover, li a:hover {
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
+}
+
+#contact form span{
+	padding-top: 15px;
+	color: red;
 }
 
 #contact input {

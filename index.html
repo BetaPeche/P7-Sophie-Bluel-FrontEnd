@@ -10,9 +10,15 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="https://kit.fontawesome.com/88f7d5a863.js" crossorigin="anonymous"></script>
-	<script type="module" src="js/index.js"></script>
+	<script src="js/index.js" defer></script>
 </head>
 <body>
+	<aside class="modal">
+		<div class="window-modal">
+			<i class="fa-solid fa-xmark"></i>
+			<div class="modal-content"></div>
+		</div>
+	</aside>
 <aside class="edit-mode">
 	<i class="fa-regular fa-pen-to-square"></i>
 	<p>Mode édition</p>
@@ -42,6 +48,10 @@
 	</section>
 	<section id="portfolio">
 		<h2>Mes Projets</h2>
+		<div class="edit-button">
+			<i class="fa-regular fa-pen-to-square"></i>
+			<button>modifier</button>
+		</div>
 		<div class="category"></div>
 		<div class="gallery"></div>
 	</section>

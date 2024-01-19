@@ -48,9 +48,7 @@ async function connectionDB(obj){
     })
     const jobs = await reponse.json()
     if(jobs.userId){
-        console.log("connection ok")
         const token = jobs.token
-        console.log(token)
         localStorage.setItem("token", token)
         location.href = "index.html"
     }

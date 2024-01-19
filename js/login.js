@@ -53,6 +53,6 @@ async function connectionDB(obj){
         location.href = "index.html"
     }
     else{
-        afficherErreur("Mauvaise combinaison Email/mot de passe")
+        afficherErreur("Erreur dans l’identifiant ou le mot de passe")
     }
 }

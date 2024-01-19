@@ -18,6 +18,7 @@ async function main() {
     closeModal()
 }
 
+// Récupère les travaux via l'API
 async function fetchWorks() {
     if(!localStorage.getItem("works")){
         try { const reponse = await fetch(`${URL_API}/works`) }
@@ -31,8 +32,8 @@ async function fetchWorks() {
     return JSON.parse(localStorage.getItem("works"))
 }
 
-async function fetchCategories(){
-    // Récupère et affiche les catégories via l'API  
+// Récupère les catégories via l'API
+async function fetchCategories(){  
     if (!localStorage.getItem("category")) {
         try { const resp = await fetch(`${URL_API}/categories`) }
         catch (err) {
@@ -45,6 +46,7 @@ async function fetchCategories(){
     return JSON.parse(localStorage.getItem("category"))
 }
 
+// Affiche les categories
 function showFilterCategories(category, works){
     const divCat = document.querySelector(".category")
     for (let i = 0; i < category.length; i++) {
@@ -83,7 +85,7 @@ function showFilterCategories(category, works){
     }
 }
 
-// Créer et affiche les travaux via un tableau
+// Affiche les travaux via un tableau
 function showWorks(tableau) {
     const gallery = document.querySelector('.gallery')
     gallery.innerHTML = ''

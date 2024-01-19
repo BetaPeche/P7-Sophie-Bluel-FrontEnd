@@ -1,3 +1,4 @@
+const URL_API = "http://localhost:5678/api"
 const form = document.querySelector("#contact form")
 
 validateButton()
@@ -46,11 +47,17 @@ function showError(text) {
 // Connection à l'API
 async function connexionDB(obj){
     const connectDB = JSON.stringify(obj)
-    try { const reponse = await fetch("http://localhost:5678/api/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: connectDB
-    }) 
+    let reponse
+        try { reponse = await fetch(`${URL_API}/users/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: connectDB
+        })  
+        }
+        catch (err) {
+            console.error(err.message)
+        }
+    
     const jobs = await reponse.json()
     
     if(jobs.userId){
@@ -61,8 +68,5 @@ async function connexionDB(obj){
     else{
         showError("Erreur dans l’identifiant ou le mot de passe")
     }
-    }
-    catch (err) {
-        console.error(err.message)
-    }
+    
 }

@@ -18,14 +18,15 @@ async function main() {
     closeModal()
 }
 
-// Récupère les travaux via l'API
+// Récupère les catégories via l'API
 async function fetchWorks() {
     if(!localStorage.getItem("works")){
-        try { const reponse = await fetch(`${URL_API}/works`) }
+        let reponse
+        try { reponse = await fetch(`${URL_API}/works`) }
         catch (err) {
             console.error(err.message)
         }
-            let jobs = await reponse.json()
+        let jobs = await reponse.json()
             
         localStorage.setItem("works", JSON.stringify(jobs)) 
     }
@@ -35,11 +36,12 @@ async function fetchWorks() {
 // Récupère les catégories via l'API
 async function fetchCategories(){  
     if (!localStorage.getItem("category")) {
-        try { const resp = await fetch(`${URL_API}/categories`) }
+        let resp
+        try { resp = await fetch(`${URL_API}/categories`) }
         catch (err) {
             console.error(err.message)
         }
-        let cate= await resp.json() 
+        let cate =  await resp.json() 
         
         localStorage.setItem("category", JSON.stringify(cate)) 
     }

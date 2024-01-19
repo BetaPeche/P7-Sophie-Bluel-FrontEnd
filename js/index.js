@@ -1,28 +1,51 @@
-async function recuperationTravaux(){
-    if(!localStorage.getItem("works")){
-        const reponse = await fetch("http://localhost:5678/api/works")
-        let jobs = await reponse.json()
-        
-        jobs = JSON.stringify(jobs)
-        localStorage.setItem("works", jobs) 
-    }
-    let works = localStorage.getItem("works")
-    works = JSON.parse(works)
-    console.log(works)
-    afficherTravaux(works)
+const URL_API = "http://localhost:5678/api"
 
+main()
+
+
+
+
+/////////////////////////////////////////// FONCTIONS ////////////////////////////////////////////////////
+
+//Fonction principale, récupère et affiche les catégories et les travaux
+async function main() { 
+    const works = await fetchWorks()
+    showWorks(works) 
+    const category = await fetchCategories()
+    showFilterCategories(category, works)
+    isConnected()
+    showModal()
+    closeModal()
+}
+
+async function fetchWorks() {
+    if(!localStorage.getItem("works")){
+        try { const reponse = await fetch(`${URL_API}/works`) }
+        catch (err) {
+            console.error(err.message)
+        }
+            let jobs = await reponse.json()
+            
+        localStorage.setItem("works", JSON.stringify(jobs)) 
+    }
+    return JSON.parse(localStorage.getItem("works"))
+}
+
+async function fetchCategories(){
     // Récupère et affiche les catégories via l'API  
-    if(!localStorage.getItem("category")){
-        const resp = await fetch("http://localhost:5678/api/categories")
+    if (!localStorage.getItem("category")) {
+        try { const resp = await fetch(`${URL_API}/categories`) }
+        catch (err) {
+            console.error(err.message)
+        }
         let cate= await resp.json() 
         
-        cate = JSON.stringify(cate)
-        localStorage.setItem("category", cate) 
+        localStorage.setItem("category", JSON.stringify(cate)) 
     }
-    let category = localStorage.getItem("category")
-    category = JSON.parse(category)
-    
-    
+    return JSON.parse(localStorage.getItem("category"))
+}
+
+function showFilterCategories(category, works){
     const divCat = document.querySelector(".category")
     for (let i = 0; i < category.length; i++) {
         if(!i){
@@ -33,8 +56,8 @@ async function recuperationTravaux(){
             link.innerText="Tous"
             divCat.appendChild(link)
             link.addEventListener("click", (event)=> {
-                effacerClassCategorie()
-                afficherTravaux(works)
+                deleteCategoryClass()
+                showWorks(works)
                 const activeLink = event.currentTarget
                 activeLink.classList.add("link-selected")
             })
@@ -48,29 +71,20 @@ async function recuperationTravaux(){
         divCat.appendChild(link)
 
         link.addEventListener("click", (event)=> {
-            effacerClassCategorie()
+            deleteCategoryClass()
             const activeLink = event.currentTarget
             const numbCat = activeLink.getAttribute("data-category-id")
             const newArray = works.filter(function (works) {
                 return works.categoryId == numbCat
             })
-            afficherTravaux(newArray)
+            showWorks(newArray)
             activeLink.classList.add("link-selected")
         })
     }
 }
 
-recuperationTravaux()
-estConnecte()
-afficherModale()
-fermerModale()
-
-
-/////////////////////////////////////////// FONCTIONS ////////////////////////////////////////////////////
-
-
 // Créer et affiche les travaux via un tableau
-function afficherTravaux(tableau) {
+function showWorks(tableau) {
     const gallery = document.querySelector('.gallery')
     gallery.innerHTML = ''
 
@@ -90,7 +104,7 @@ function afficherTravaux(tableau) {
 }
 
 // Supprime la classe "link-selected" sur les liens
-function effacerClassCategorie() {
+function deleteCategoryClass() {
     const links = document.querySelectorAll(".category button")
     for (let i = 0; i < links.length; i++) {
         links[i].classList.remove("link-selected")
@@ -98,7 +112,7 @@ function effacerClassCategorie() {
 }
 
 // Vérifie si l'utilisateur est connecté
-function estConnecte() {
+function isConnected() {
     const token = window.localStorage.getItem("token")
     if(token){
         logIn()
@@ -136,7 +150,7 @@ function logIn(){
 
 // Deconnecte l'utilisateur
 function logOut(){
-    window.localStorage.removeItem("token")
+    window.localStorage.removeItem("token") // @TODO : remove window.
 
     const editBar = document.querySelector(".edit-mode")
     editBar.style.display = "none"
@@ -155,7 +169,7 @@ function logOut(){
 }
 
 // Affiche la modale
-function afficherModale() {
+function showModal() {
     const button = document.querySelector(".edit-button button")
     const modal = document.querySelector(".modal")
 
@@ -165,7 +179,7 @@ function afficherModale() {
 }
 
 // Ferme la modale
-function fermerModale() {
+function closeModal() {
     const modal = document.querySelector(".modal")
     const windowModal = document.querySelector(".window-modal")
     const closeBtn = document.querySelector(".fa-xmark")

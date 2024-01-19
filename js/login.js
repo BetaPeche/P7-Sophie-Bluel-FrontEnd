@@ -1,28 +1,33 @@
 const form = document.querySelector("#contact form")
-const button = document.querySelector('#contact input[type="submit"]')
 
+validateButton()
 
-form.addEventListener("submit", (event)=> {
-    event.preventDefault()
-    let mail = document.getElementById("email")
-    let mailValue = mail.value 
+// Gère le clic sur le bouton 
+function validateButton(){
+    form.addEventListener("submit", (event)=> {
+        event.preventDefault()
+        let mail = document.getElementById("email")
+        let mailValue = mail.value 
 
-    let password = document.getElementById("password")
-    let passwordValue = password.value.trim()
-    if(passwordValue === "" || mailValue === ""){
-        afficherErreur("Veuillez remplir tous les champs")
-    }
-    else{
-        const connect = {
-            email: mailValue,
-            password: passwordValue
+        let password = document.getElementById("password")
+        let passwordValue = password.value.trim()
+        if(passwordValue === "" || mailValue === ""){
+            showError("Veuillez remplir tous les champs")
         }
-        connectionDB(connect)
-    }
-})
+        else{
+            const connect = {
+                email: mailValue,
+                password: passwordValue
+            }
+            connexionDB(connect)
+        }
+    })
+}
 
-function afficherErreur(text) {
+// Affiche les messages d'erreur sur le formulaire
+function showError(text) {
     const testSpan = document.querySelector("#contact form span")
+    const button = document.querySelector('#contact input[type="submit"]')
     if(!testSpan){
         const span = document.createElement('span')
         span.innerText = text
@@ -39,20 +44,25 @@ function afficherErreur(text) {
 }
 
 // Connection à l'API
-async function connectionDB(obj){
+async function connexionDB(obj){
     const connectDB = JSON.stringify(obj)
-    const reponse = await fetch("http://localhost:5678/api/users/login", {
+    try { const reponse = await fetch("http://localhost:5678/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: connectDB
-    })
+    }) 
     const jobs = await reponse.json()
+    
     if(jobs.userId){
         const token = jobs.token
         localStorage.setItem("token", token)
         location.href = "index.html"
     }
     else{
-        afficherErreur("Erreur dans l’identifiant ou le mot de passe")
+        showError("Erreur dans l’identifiant ou le mot de passe")
+    }
+    }
+    catch (err) {
+        console.error(err.message)
     }
 }

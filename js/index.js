@@ -183,14 +183,14 @@ function logOut(){
 }
 
 // Affiche la modale
-function showModal(works) {
+function showModal() {
     const button = document.querySelector(".edit-button button")
     const modal = document.querySelector(".modal")
 
     button.addEventListener("click", () => {
         modal.style.display = "flex"
-        showPageOne(works)
-        //showPageTwo()
+        //showPageOne()
+        showPageTwo()
     })
 }
 
@@ -213,16 +213,19 @@ function closeModal() {
 }
 
 //Affiche la première page de la modale
-function showPageOne(tableau){
-    const content = document.querySelector(".modal-works")
+function showPageOne(){
+    const content = document.querySelector(".main-content")
     const title = document.querySelector(".modal-content h3")
     const button = document.querySelector(".modal-content .modal-btn button")
+    const works = JSON.parse(localStorage.getItem("works"))
 
+    content.classList.remove("upload-image")
+    content.classList.add("modal-works")
     content.innerHTML = ''
     title.innerText = "Galerie photo"
     button.innerText = "Ajouter une photo"
 
-    showWorksInModal(tableau)
+    showWorksInModal(works)
 
     button.addEventListener("click", (event) => {
         event.preventDefault()
@@ -232,13 +235,21 @@ function showPageOne(tableau){
 
 //Affiche la deuxième page de la modale
 function showPageTwo(){
-    const content = document.querySelector(".modal-works")
+    const content = document.querySelector(".main-content")
     const title = document.querySelector(".modal-content h3")
     const button = document.querySelector(".modal-content .modal-btn button")
 
-    content.innerHTML = ''
+    content.classList.remove("modal-works")
+    content.classList.add("upload-image")
+    //content.innerHTML = ''
     title.innerText = "Ajout photo"
     button.innerText = "Valider"
+    showImage()
+
+    // button.addEventListener("click", (event) => {
+    //     event.preventDefault()
+    //     showPageOne()
+    // })
 }
 
 // Affiche les travaux dans la modale
@@ -294,6 +305,26 @@ async function deleteWorks(id, token) {
         showWorksInModal(works)
         showWorks(works)
     }
+}
+
+//Affiche l'image sur le formulaire d'upload
+function showImage(){
+    const inputImage = document.getElementById("input-image")
+    const image = document.querySelector(".upload-image img")
+    const svg = document.querySelector(".upload-image svg")
+    const p = document.querySelector(".upload-image p")
+    const btnUpload = document.querySelector(".label-input-image")
+
+    
+
+    inputImage.addEventListener("change", () => {
+        svg.style.display = "none"
+        p.style.display = "none"
+        btnUpload.style.display = "none"
+        image.style.display = "block"
+        image.src = URL.createObjectURL(inputImage.files[0])
+        console.log(inputImage.files[0].size)
+    })
 }
 
 

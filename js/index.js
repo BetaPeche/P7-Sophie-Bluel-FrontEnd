@@ -16,22 +16,30 @@ async function main() {
     const category = await fetchCategories()
     showFilterCategories(category, works)
     isConnected()
-    showModal()
+    showModal(works)
     closeModal()
 }
 
 // Récupère les catégories via l'API
 async function fetchWorks() {
-    if(!localStorage.getItem("works")){
         let reponse
         try { reponse = await fetch(`${URL_API}/works`) }
         catch (err) {
             console.error(err.message)
         }
         let jobs = await reponse.json()
-            
-        localStorage.setItem("works", JSON.stringify(jobs)) 
-    }
+        const stringJobs = JSON.stringify(jobs)
+
+        if(!localStorage.getItem("works")){
+            localStorage.setItem("works", stringJobs) 
+        }else{
+            const localJobs = localStorage.getItem("works")
+
+            if (stringJobs !== localJobs){
+                localStorage.setItem("works", stringJobs)
+            }
+        }
+
     return JSON.parse(localStorage.getItem("works"))
 }
 
@@ -119,7 +127,7 @@ function deleteCategoryClass() {
 
 // Vérifie si l'utilisateur est connecté
 function isConnected() {
-    const token = window.localStorage.getItem("token")
+    const token = localStorage.getItem("token")
     if(token){
         logIn()
     }
@@ -156,7 +164,7 @@ function logIn(){
 
 // Deconnecte l'utilisateur
 function logOut(){
-    window.localStorage.removeItem("token") // @TODO : remove window.
+    localStorage.removeItem("token")
 
     const editBar = document.querySelector(".edit-mode")
     editBar.style.display = "none"
@@ -175,12 +183,14 @@ function logOut(){
 }
 
 // Affiche la modale
-function showModal() {
+function showModal(works) {
     const button = document.querySelector(".edit-button button")
     const modal = document.querySelector(".modal")
 
     button.addEventListener("click", () => {
         modal.style.display = "flex"
+        showPageOne(works)
+        //showPageTwo()
     })
 }
 
@@ -200,6 +210,90 @@ function closeModal() {
     windowModal.addEventListener("click", (event) => {
         event.stopPropagation()
     })
+}
+
+//Affiche la première page de la modale
+function showPageOne(tableau){
+    const content = document.querySelector(".modal-works")
+    const title = document.querySelector(".modal-content h3")
+    const button = document.querySelector(".modal-content .modal-btn button")
+
+    content.innerHTML = ''
+    title.innerText = "Galerie photo"
+    button.innerText = "Ajouter une photo"
+
+    showWorksInModal(tableau)
+
+    button.addEventListener("click", (event) => {
+        event.preventDefault()
+        showPageTwo()
+    })
+}
+
+//Affiche la deuxième page de la modale
+function showPageTwo(){
+    const content = document.querySelector(".modal-works")
+    const title = document.querySelector(".modal-content h3")
+    const button = document.querySelector(".modal-content .modal-btn button")
+
+    content.innerHTML = ''
+    title.innerText = "Ajout photo"
+    button.innerText = "Valider"
+}
+
+// Affiche les travaux dans la modale
+function showWorksInModal(tableau) {
+    const contentWorks = document.querySelector('.modal-works')
+    contentWorks.innerHTML = ''
+
+    for (let i = 0; i < tableau.length; i++) {
+        const mainDiv = document.createElement("div")
+        const img = document.createElement("img")
+        const deleteBtn = document.createElement("div")
+        const iconBtn = document.createElement("i")
+
+        mainDiv.classList.add("works-img-modal")
+        deleteBtn.classList.add("delete-btn")
+        iconBtn.classList.add("fa-solid", "fa-trash-can")
+
+        img.setAttribute("src", tableau[i].imageUrl)
+        img.setAttribute("alt", tableau[i].title)
+
+        mainDiv.setAttribute("data-id", tableau[i].id)
+
+        contentWorks.appendChild(mainDiv)
+        mainDiv.appendChild(img)
+        mainDiv.appendChild(deleteBtn)
+        deleteBtn.appendChild(iconBtn)
+
+        deleteBtn.addEventListener("click", (event) => {
+            const idWork = mainDiv.getAttribute("data-id")
+            const token = localStorage.getItem("token")
+            deleteWorks(idWork, token)
+        })
+
+    }
+}
+
+// Supprime les travaux dans la modale 
+async function deleteWorks(id, token) {
+    let reponse
+    try { reponse = await fetch(`${URL_API}/works/${id}`, { 
+        method: 'DELETE',
+        headers: {
+            'Accept': '*/*',
+            'Authorization': `Bearer ${token}`
+        }
+    }) }
+    catch (err) {
+        console.error(err.message)
+    }
+    if (reponse.ok) {
+        await fetchWorks()
+        let works = JSON.parse(localStorage.getItem("works"))
+        showWorksInModal(works)
+        showWorks(works)
+    }
 }
 
 

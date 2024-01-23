@@ -219,7 +219,9 @@ function showPageOne(){
     const contentHide = document.querySelector(".upload-block")
     const title = document.querySelector(".modal-content h3")
     const works = JSON.parse(localStorage.getItem("works"))
+    const leftArrow = document.querySelector(".window-modal .fa-arrow-left")
 
+    leftArrow.style.display = "none"
     modalBtn.innerHTML = ''
     let button = document.createElement("button")
     modalBtn.appendChild(button)
@@ -244,7 +246,9 @@ function showPageTwo(){
     const inputTitle = document.getElementById("title-upload")
     const inputCategory = document.getElementById("category-upload")
     let inputImage = document.getElementById("input-image")
+    const leftArrow = document.querySelector(".window-modal .fa-arrow-left")
 
+    leftArrow.style.display = "block"
     modalBtn.innerHTML = ''
     inputTitle.value = ''
     let button = document.createElement("button")
@@ -257,6 +261,10 @@ function showPageTwo(){
     showImage()
     showErrorInModal("")
     showCategoryInModal(inputCategory)
+
+    leftArrow.addEventListener("click", () => {
+        showPageOne()
+    }, {once : true})
 
     button.addEventListener("click", () => {
         if(!inputImage.files[0] || !inputTitle.value){

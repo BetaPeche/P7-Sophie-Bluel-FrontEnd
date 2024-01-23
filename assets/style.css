@@ -134,6 +134,14 @@ h2{
 	top: 30px;
 }
 
+.window-modal .fa-arrow-left{
+	cursor: pointer;
+	position: absolute;
+	font-size: 16px;
+	left: 30px;
+	top: 30px;
+}
+
 .modal-content {
 	display: flex;
 	flex-direction: column;
@@ -437,7 +445,8 @@ li:hover, li a:hover {
 
 .gallery img {
 	width: 100%;
-	height: 100%;
+	height: 506px;
+	object-fit: cover;
 
 }
 #contact {

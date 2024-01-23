@@ -61,6 +61,7 @@ async function fetchCategories(){
 // Affiche les categories
 function showFilterCategories(category, works){
     const divCat = document.querySelector(".category")
+    divCat.innerHTML = ''
     for (let i = 0; i < category.length; i++) {
         if(!i){
             const link = document.createElement("button")
@@ -190,7 +191,6 @@ function showModal() {
     button.addEventListener("click", () => {
         modal.style.display = "flex"
         showPageOne()
-        //showPageTwo()
     })
 }
 
@@ -239,17 +239,54 @@ function showPageTwo(){
     const contentHide = document.querySelector(".modal-works")
     const title = document.querySelector(".modal-content h3")
     const button = document.querySelector(".modal-content .modal-btn button")
+    const inputTitle = document.getElementById("title-upload")
+    const inputCategory = document.getElementById("category-upload")
+    const inputImage = document.getElementById("input-image")
 
     contentHide.style.display = "none"
     content.style.display = "block"
     //content.innerHTML = ''
     title.innerText = "Ajout photo"
     button.innerText = "Valider"
+
     showImage()
+    showCategoryInModal(inputCategory)
 
     button.addEventListener("click", () => {
-        showPageOne()
+        test(inputImage.files[0], inputTitle.value, inputCategory.value)
+        // console.log(inputTitle.value)
+        // console.log(inputCategory.value)
+        // console.log(inputImage.files[0])
     }, {once : true})
+}
+
+// Upload
+async function test(img, title, categoryId) {
+    const token = localStorage.getItem("token")
+    let formData = new FormData()
+    formData.append("title", title);
+    formData.append("category", categoryId);
+    formData.append("image", img);
+
+    let reponse
+    try { reponse = await fetch(`${URL_API}/works/`, { 
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+    }) }
+    catch (err) {
+        console.error(err.message)
+    }
+    if (reponse.ok) {
+        await fetchWorks()
+        let works = JSON.parse(localStorage.getItem("works"))
+        let category = JSON.parse(localStorage.getItem("category"))
+        //showWorksInModal(works)
+        showWorks(works)
+        showFilterCategories(category, works)
+    }
 }
 
 // Affiche les travaux dans la modale
@@ -286,6 +323,17 @@ function showWorksInModal(tableau) {
     }
 }
 
+//Affiche la liste des catégories dans la modale
+function showCategoryInModal (parent) {
+    let category = JSON.parse(localStorage.getItem("category"))
+    for (let i = 0; i < category.length; i++) {
+        let inputOption = document.createElement("option")
+        inputOption.setAttribute("value", category[i].id)
+        inputOption.innerText = category[i].name
+        parent.appendChild(inputOption)  
+    }
+}
+
 // Supprime les travaux dans la modale 
 async function deleteWorks(id, token) {
     let reponse
@@ -302,19 +350,27 @@ async function deleteWorks(id, token) {
     if (reponse.ok) {
         await fetchWorks()
         let works = JSON.parse(localStorage.getItem("works"))
+        let category = JSON.parse(localStorage.getItem("category"))
         showWorksInModal(works)
         showWorks(works)
+        showFilterCategories(category, works)
     }
 }
 
 //Affiche l'image sur le formulaire d'upload
 function showImage(){
-    const inputImage = document.getElementById("input-image")
+    let inputImage = document.getElementById("input-image")
     const image = document.querySelector(".upload-image img")
     const svg = document.querySelector(".upload-image svg")
     const p = document.querySelector(".upload-image p")
     const btnUpload = document.querySelector(".label-input-image")
 
+
+    inputImage.value = ""
+    svg.style.display = "block"
+    p.style.display = "block"
+    btnUpload.style.display = "block"
+    image.style.display = "none"
     
 
     inputImage.addEventListener("change", () => {

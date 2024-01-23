@@ -166,6 +166,7 @@ h2{
 }
 
 .upload-block {
+	flex-grow: 1;
 	display: none;
 }
 
@@ -219,12 +220,21 @@ h2{
 .upload-form{
 	width: 100%;
 }
+
 .upload-form label {
 	text-align: left;
 	color: #3D3D3D;
 	font-family: "Work Sans";
 	font-size: 14px;
 	font-weight: 500;
+}
+
+.upload-form select {
+	margin-bottom: 15px;
+}
+
+.upload-form span {
+	color: red;
 }
 
 #category-upload, .upload-form input {
@@ -238,10 +248,7 @@ h2{
 	font-size: 14px;
 	font-weight: 400;
 	margin-top: 10px;
-}
-
-.upload-form :last-child {
-	margin-bottom: 50px;
+	box-sizing: border-box;
 	padding-left: 16px;
 }
 

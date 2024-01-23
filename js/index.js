@@ -214,12 +214,15 @@ function closeModal() {
 
 //Affiche la première page de la modale
 function showPageOne(){
+    let modalBtn = document.querySelector(".modal-btn")
     const content = document.querySelector(".modal-works")
     const contentHide = document.querySelector(".upload-block")
     const title = document.querySelector(".modal-content h3")
-    const button = document.querySelector(".modal-content .modal-btn button")
     const works = JSON.parse(localStorage.getItem("works"))
 
+    modalBtn.innerHTML = ''
+    let button = document.createElement("button")
+    modalBtn.appendChild(button)
     contentHide.style.display = "none"
     content.style.display = "grid"
     //content.innerHTML = ''
@@ -227,7 +230,6 @@ function showPageOne(){
     button.innerText = "Ajouter une photo"
 
     showWorksInModal(works)
-
     button.addEventListener("click", () => {
         showPageTwo()
     }, {once : true})
@@ -235,33 +237,46 @@ function showPageOne(){
 
 //Affiche la deuxième page de la modale
 function showPageTwo(){
+    let modalBtn = document.querySelector(".modal-btn")
     const content = document.querySelector(".upload-block")
     const contentHide = document.querySelector(".modal-works")
     const title = document.querySelector(".modal-content h3")
-    const button = document.querySelector(".modal-content .modal-btn button")
     const inputTitle = document.getElementById("title-upload")
     const inputCategory = document.getElementById("category-upload")
-    const inputImage = document.getElementById("input-image")
+    let inputImage = document.getElementById("input-image")
+
+    modalBtn.innerHTML = ''
+    inputTitle.value = ''
+    let button = document.createElement("button")
+    modalBtn.appendChild(button)
 
     contentHide.style.display = "none"
     content.style.display = "block"
-    //content.innerHTML = ''
     title.innerText = "Ajout photo"
     button.innerText = "Valider"
-
     showImage()
+    showErrorInModal("")
     showCategoryInModal(inputCategory)
 
     button.addEventListener("click", () => {
-        test(inputImage.files[0], inputTitle.value, inputCategory.value)
-        // console.log(inputTitle.value)
-        // console.log(inputCategory.value)
-        // console.log(inputImage.files[0])
-    }, {once : true})
+        if(!inputImage.files[0] || !inputTitle.value){
+            showErrorInModal("Un champ est vide")
+        }else if(inputImage.files[0].size > 4194304) {
+            showErrorInModal("Le poids de l'image doit être inférieur à 4Mo")
+        }
+        else if(inputImage.files[0].type !== "image/png" && inputImage.files[0].type !== "image/jpeg"){
+            showErrorInModal("Mauvais format")
+        }
+        else{
+            uploadWorks(inputImage.files[0], inputTitle.value, inputCategory.value)
+            const modal = document.querySelector(".modal")
+            modal.style.display = "none"
+        }
+    })
 }
 
-// Upload
-async function test(img, title, categoryId) {
+// Upload le projet
+async function uploadWorks(img, title, categoryId) {
     const token = localStorage.getItem("token")
     let formData = new FormData()
     formData.append("title", title);
@@ -326,6 +341,7 @@ function showWorksInModal(tableau) {
 //Affiche la liste des catégories dans la modale
 function showCategoryInModal (parent) {
     let category = JSON.parse(localStorage.getItem("category"))
+    parent.innerHTML = ''
     for (let i = 0; i < category.length; i++) {
         let inputOption = document.createElement("option")
         inputOption.setAttribute("value", category[i].id)
@@ -379,8 +395,13 @@ function showImage(){
         btnUpload.style.display = "none"
         image.style.display = "block"
         image.src = URL.createObjectURL(inputImage.files[0])
-        console.log(inputImage.files[0].size)
     })
+}
+
+//Affiche les messages d'erreur dans la modale
+function showErrorInModal(text) {
+    const testSpan = document.querySelector(".upload-form span")
+    testSpan.innerText = text
 }
 
 

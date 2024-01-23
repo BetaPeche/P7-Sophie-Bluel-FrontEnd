@@ -165,6 +165,10 @@ h2{
 	height: 170px;
 }
 
+.upload-block {
+	display: none;
+}
+
 .upload-image {
 	width: 420px;
 	height: 169px;

@@ -189,8 +189,8 @@ function showModal() {
 
     button.addEventListener("click", () => {
         modal.style.display = "flex"
-        //showPageOne()
-        showPageTwo()
+        showPageOne()
+        //showPageTwo()
     })
 }
 
@@ -214,42 +214,42 @@ function closeModal() {
 
 //Affiche la première page de la modale
 function showPageOne(){
-    const content = document.querySelector(".main-content")
+    const content = document.querySelector(".modal-works")
+    const contentHide = document.querySelector(".upload-block")
     const title = document.querySelector(".modal-content h3")
     const button = document.querySelector(".modal-content .modal-btn button")
     const works = JSON.parse(localStorage.getItem("works"))
 
-    content.classList.remove("upload-image")
-    content.classList.add("modal-works")
-    content.innerHTML = ''
+    contentHide.style.display = "none"
+    content.style.display = "grid"
+    //content.innerHTML = ''
     title.innerText = "Galerie photo"
     button.innerText = "Ajouter une photo"
 
     showWorksInModal(works)
 
-    button.addEventListener("click", (event) => {
-        event.preventDefault()
+    button.addEventListener("click", () => {
         showPageTwo()
-    })
+    }, {once : true})
 }
 
 //Affiche la deuxième page de la modale
 function showPageTwo(){
-    const content = document.querySelector(".main-content")
+    const content = document.querySelector(".upload-block")
+    const contentHide = document.querySelector(".modal-works")
     const title = document.querySelector(".modal-content h3")
     const button = document.querySelector(".modal-content .modal-btn button")
 
-    content.classList.remove("modal-works")
-    content.classList.add("upload-image")
+    contentHide.style.display = "none"
+    content.style.display = "block"
     //content.innerHTML = ''
     title.innerText = "Ajout photo"
     button.innerText = "Valider"
     showImage()
 
-    // button.addEventListener("click", (event) => {
-    //     event.preventDefault()
-    //     showPageOne()
-    // })
+    button.addEventListener("click", () => {
+        showPageOne()
+    }, {once : true})
 }
 
 // Affiche les travaux dans la modale

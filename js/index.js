@@ -253,14 +253,27 @@ function showPageTwo(){
     inputTitle.value = ''
     let button = document.createElement("button")
     modalBtn.appendChild(button)
+    button.classList.remove("grey-btn")
 
     contentHide.style.display = "none"
     content.style.display = "block"
     title.innerText = "Ajout photo"
     button.innerText = "Valider"
+    button.classList.add("grey-btn")
     showImage()
     showErrorInModal("")
     showCategoryInModal(inputCategory)
+
+    inputTitle.addEventListener("input", ()=>{
+        if(inputTitle.value > "1"){
+            button.classList.add("green-btn1")
+        }else{
+            button.classList.remove("green-btn1")
+        }
+    })
+    inputImage.addEventListener("input", ()=>{
+        button.classList.add("green-btn2")
+    })
 
     leftArrow.addEventListener("click", () => {
         showPageOne()

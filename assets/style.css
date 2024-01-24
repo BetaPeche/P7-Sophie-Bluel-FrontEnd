@@ -312,6 +312,14 @@ h2{
 	cursor: pointer;
 }
 
+.modal-btn .grey-btn {
+	background-color: #A7A7A7;
+}
+
+.modal-btn .green-btn1.green-btn2 {
+	background-color: #1D6154;
+}
+
 .edit-mode {
 	position: absolute;
 	top: 0px;

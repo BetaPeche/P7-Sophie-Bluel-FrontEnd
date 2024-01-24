@@ -281,7 +281,7 @@ function showPageTwo(){
 
     button.addEventListener("click", () => {
         if(!inputImage.files[0] || !inputTitle.value){
-            showErrorInModal("Un champ est vide")
+            showErrorInModal("Veuillez remplir tous les champs")
         }else if(inputImage.files[0].size > 4194304) {
             showErrorInModal("Le poids de l'image doit être inférieur à 4Mo")
         }

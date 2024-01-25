@@ -4,7 +4,9 @@
 async function main() { 
     const works = await fetchWorks()
     showWorks(works) 
+
     const category = await fetchCategories()
+
     showFilterCategories(category, works)
     isConnected()
     showModal(works)
@@ -13,22 +15,16 @@ async function main() {
 
 // Récupère les catégories via l'API
 async function fetchWorks() {
-        let reponse
-        try { reponse = await fetch(`${URL_API}/works`) }
+       
+    try {
+        let respons = await fetch(`${URL_API}/works`)
+
+        let jobs = await respons.json()
+        const stringJobs = JSON.stringify(jobs)
+        localStorage.setItem("works", stringJobs)
+    }
         catch (err) {
             console.error(err.message)
-        }
-        let jobs = await reponse.json()
-        const stringJobs = JSON.stringify(jobs)
-
-        if(!localStorage.getItem("works")){
-            localStorage.setItem("works", stringJobs) 
-        }else{
-            const localJobs = localStorage.getItem("works")
-
-            if (stringJobs !== localJobs){
-                localStorage.setItem("works", stringJobs)
-            }
         }
 
     return JSON.parse(localStorage.getItem("works"))
@@ -37,14 +33,15 @@ async function fetchWorks() {
 // Récupère les catégories via l'API
 async function fetchCategories(){  
     if (!localStorage.getItem("category")) {
-        let resp
-        try { resp = await fetch(`${URL_API}/categories`) }
+        try { 
+            let resp = await fetch(`${URL_API}/categories`) 
+            let cate =  await resp.json() 
+        
+            localStorage.setItem("category", JSON.stringify(cate)) 
+        }
         catch (err) {
             console.error(err.message)
         }
-        let cate =  await resp.json() 
-        
-        localStorage.setItem("category", JSON.stringify(cate)) 
     }
     return JSON.parse(localStorage.getItem("category"))
 }
@@ -80,9 +77,8 @@ function showFilterCategories(category, works){
             deleteCategoryClass()
             const activeLink = event.currentTarget
             const numbCat = activeLink.getAttribute("data-category-id")
-            const newArray = works.filter(function (works) {
-                return works.categoryId == numbCat
-            })
+            const newArray = works.filter((work) => work.categoryId == numbCat)
+            
             showWorks(newArray)
             activeLink.classList.add("link-selected")
         })
@@ -90,18 +86,18 @@ function showFilterCategories(category, works){
 }
 
 // Affiche les travaux via un tableau
-function showWorks(tableau) {
+function showWorks(array) {
     const gallery = document.querySelector('.gallery')
     gallery.innerHTML = ''
 
-    for (let i = 0; i < tableau.length; i++) {
+    for (let i = 0; i < array.length; i++) {
         const figure = document.createElement("figure")
         const img = document.createElement("img")
         const figcaption = document.createElement("figcaption")
 
-        img.setAttribute("src", tableau[i].imageUrl)
-        img.setAttribute("alt", tableau[i].title)
-        figcaption.innerText = tableau[i].title
+        img.setAttribute("src", array[i].imageUrl)
+        img.setAttribute("alt", array[i].title)
+        figcaption.innerText = array[i].title
 
         gallery.appendChild(figure)
         figure.appendChild(img)
@@ -218,7 +214,6 @@ function showPageOne(){
     modalBtn.appendChild(button)
     contentHide.style.display = "none"
     content.style.display = "grid"
-    //content.innerHTML = ''
     title.innerText = "Galerie photo"
     button.innerText = "Ajouter une photo"
 
@@ -295,8 +290,8 @@ async function uploadWorks(img, title, categoryId) {
     formData.append("category", categoryId);
     formData.append("image", img);
 
-    let reponse
-    try { reponse = await fetch(`${URL_API}/works/`, { 
+    let respons
+    try { respons = await fetch(`${URL_API}/works/`, { 
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,
@@ -306,22 +301,21 @@ async function uploadWorks(img, title, categoryId) {
     catch (err) {
         console.error(err.message)
     }
-    if (reponse.ok) {
+    if (respons.ok) {
         await fetchWorks()
         let works = JSON.parse(localStorage.getItem("works"))
         let category = JSON.parse(localStorage.getItem("category"))
-        //showWorksInModal(works)
         showWorks(works)
         showFilterCategories(category, works)
     }
 }
 
 // Affiche les travaux dans la modale
-function showWorksInModal(tableau) {
+function showWorksInModal(array) {
     const contentWorks = document.querySelector('.modal-works')
     contentWorks.innerHTML = ''
 
-    for (let i = 0; i < tableau.length; i++) {
+    for (let i = 0; i < array.length; i++) {
         const mainDiv = document.createElement("div")
         const img = document.createElement("img")
         const deleteBtn = document.createElement("div")
@@ -331,10 +325,10 @@ function showWorksInModal(tableau) {
         deleteBtn.classList.add("delete-btn")
         iconBtn.classList.add("fa-solid", "fa-trash-can")
 
-        img.setAttribute("src", tableau[i].imageUrl)
-        img.setAttribute("alt", tableau[i].title)
+        img.setAttribute("src", array[i].imageUrl)
+        img.setAttribute("alt", array[i].title)
 
-        mainDiv.setAttribute("data-id", tableau[i].id)
+        mainDiv.setAttribute("data-id", array[i].id)
 
         contentWorks.appendChild(mainDiv)
         mainDiv.appendChild(img)
@@ -364,24 +358,25 @@ function showCategoryInModal (parent) {
 
 // Supprime les travaux dans la modale 
 async function deleteWorks(id, token) {
-    let reponse
-    try { reponse = await fetch(`${URL_API}/works/${id}`, { 
-        method: 'DELETE',
-        headers: {
-            'Accept': '*/*',
-            'Authorization': `Bearer ${token}`
+    try { 
+        let respons = await fetch(`${URL_API}/works/${id}`, { 
+            method: 'DELETE',
+            headers: {
+                'Accept': '*/*',
+                'Authorization': `Bearer ${token}`
+            }
+        }) 
+        if (respons.ok) {
+            await fetchWorks()
+            let works = JSON.parse(localStorage.getItem("works"))
+            let category = JSON.parse(localStorage.getItem("category"))
+            showWorksInModal(works)
+            showWorks(works)
+            showFilterCategories(category, works)
         }
-    }) }
+    }
     catch (err) {
         console.error(err.message)
-    }
-    if (reponse.ok) {
-        await fetchWorks()
-        let works = JSON.parse(localStorage.getItem("works"))
-        let category = JSON.parse(localStorage.getItem("category"))
-        showWorksInModal(works)
-        showWorks(works)
-        showFilterCategories(category, works)
     }
 }
 

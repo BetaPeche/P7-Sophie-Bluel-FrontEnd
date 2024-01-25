@@ -47,26 +47,25 @@ function showError(text) {
 // Connection à l'API
 async function connexionDB(obj){
     const connectDB = JSON.stringify(obj)
-    let reponse
-        try { reponse = await fetch(`${URL_API}/users/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: connectDB
-        })  
+        try { 
+            let respons = await fetch(`${URL_API}/users/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: connectDB
+            })  
+            const jobs = await respons.json()
+    
+            if(jobs.userId){
+                const token = jobs.token
+                localStorage.setItem("token", token)
+                location.href = "index.html"
+            }
+            else{
+                showError("Erreur dans l’identifiant ou le mot de passe")
+            }
         }
         catch (err) {
             console.error(err.message)
         }
-    
-    const jobs = await reponse.json()
-    
-    if(jobs.userId){
-        const token = jobs.token
-        localStorage.setItem("token", token)
-        location.href = "index.html"
-    }
-    else{
-        showError("Erreur dans l’identifiant ou le mot de passe")
-    }
     
 }
